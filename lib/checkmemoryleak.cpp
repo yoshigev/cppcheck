@@ -208,6 +208,14 @@ CheckMemoryLeak::AllocType CheckMemoryLeak::getAllocationType(const Token *tok2,
     }
 
     // User function
+
+    while (Token::Match(tok2, "%var% .") || Token::Match(tok2, "%var% ::")) {
+        tok2 = tok2->next()->next();
+    }
+
+    if (!Token::Match(tok2, "%var% ("))
+      return No;
+
     const Token *ftok = tokenizer->getFunctionTokenByName(tok2->str().c_str());
     if (ftok == NULL)
         return No;
